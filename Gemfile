@@ -8,15 +8,16 @@ gem 'oj'
 gem 'thin'
 gem 'hashie'
 gem 'activesupport', require: false
+gem 'httparty'
 
 group :test, :development do
   gem 'rspec', require: false
-
-  gem 'guard'
-  gem 'guard-rspec'
+  gem 'guard', require: false
+  gem 'guard-rspec', require: false
 end
-group :test do
 
+group :test do
+  gem 'webmock', require: false
 end
 group :development do
    gem 'pry'
