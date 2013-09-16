@@ -1,4 +1,4 @@
-shared_examples_for 'a Message' do
+shared_examples_for 'an Event' do
   [:source, :context, :subject, :body, :url, :email, :tags].each do |name|
     it { should respond_to(name) }
   end

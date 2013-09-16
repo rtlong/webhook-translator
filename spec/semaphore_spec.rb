@@ -28,7 +28,7 @@ describe Semaphore::BuildEvent do
     Semaphore::BuildEvent.new attrs
   end
 
-  it_behaves_like 'a Message'
+  it_behaves_like 'an Event'
 
   describe :subject do
     subject { event.subject }
@@ -103,7 +103,7 @@ describe Semaphore::DeployEvent do
     Semaphore::DeployEvent.new attrs
   end
 
-  it_behaves_like 'a Message'
+  it_behaves_like 'an Event'
 
   describe :subject do
     subject { event.subject }

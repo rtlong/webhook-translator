@@ -1,4 +1,4 @@
-class BasicMessage
+class BasicEvent
   def initialize(attrs={})
     @attrs = Hashie::Mash.new(attrs)
   end

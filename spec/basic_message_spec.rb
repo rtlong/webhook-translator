@@ -1,7 +1,7 @@
 require_relative 'spec_helper'
-require 'basic_message'
+require 'basic_event'
 
-describe BasicMessage do
+describe BasicEvent do
   let(:attrs) do
     {
       source: 'the source',
@@ -22,6 +22,6 @@ describe BasicMessage do
     its(name) { should eq(attrs[name]) }
   end
 
-  it_behaves_like 'a Message'
+  it_behaves_like 'an Event'
 end
 
