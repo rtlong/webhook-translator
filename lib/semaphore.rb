@@ -22,6 +22,14 @@ module Semaphore
       ActiveSupport::StringInquirer.new(@data.result)
     end
 
+    def email
+      @data.commit.author_email
+    end
+
+    def actor_name
+      @data.commit.author_name
+    end
+
     protected
 
     def commit_sha
@@ -48,10 +56,6 @@ module Semaphore
       @data.build_url
     end
 
-    def email
-      @data.commit.author_email
-    end
-
     def tags
       ['build', @data.branch_name, @data.project_name]
     end
@@ -70,10 +74,6 @@ module Semaphore
 
     def url
       @data.html_url
-    end
-
-    def email
-      @data.commit.author_email
     end
 
     def tags

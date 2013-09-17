@@ -3,7 +3,7 @@ class BasicEvent
     @attrs = Hashie::Mash.new(attrs)
   end
 
-  [:source, :context, :subject, :body, :url, :email, :tags].each do |name|
+  [:source, :context, :subject, :body, :url, :email, :tags, :actor_name].each do |name|
     define_method name do
       @attrs[name]
     end

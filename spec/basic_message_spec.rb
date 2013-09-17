@@ -10,6 +10,7 @@ describe BasicEvent do
       body: 'body',
       url: 'url',
       email: 'email',
+      actor_name: 'name',
       tags: %w[tag1 tag2]
     }
   end

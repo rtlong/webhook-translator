@@ -1,5 +1,5 @@
 shared_examples_for 'an Event' do
-  [:source, :context, :subject, :body, :url, :email, :tags].each do |name|
+  [:source, :context, :subject, :body, :url, :email, :tags, :actor_name].each do |name|
     it { should respond_to(name) }
   end
 
@@ -9,6 +9,7 @@ shared_examples_for 'an Event' do
   its(:body) { should be_a String }
   its(:url) { should be_a String }
   its(:email) { should be_a String }
+  its(:actor_name) { should be_a String }
   its(:tags) { should be_a Array }
 end
 

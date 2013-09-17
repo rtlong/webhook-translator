@@ -72,6 +72,7 @@ module Flowdock
           subject: event.subject,
           project: event.context,
           from_address: event.email,
+          from_name: event.actor_name,
           link: event.url,
           tags: event.tags,
         )
