@@ -2,8 +2,6 @@ require 'bundler/setup'
 Bundler.setup(:default, ENV.fetch('RACK_ENV', :development).to_sym)
 Bundler.require
 
-require 'pry'
-
 require 'event_emitter'
 require 'log_channel'
 require 'flowdock'
