@@ -21,6 +21,18 @@ module Semaphore
     def result
       ActiveSupport::StringInquirer.new(@data.result)
     end
+
+    protected
+
+    def commit_sha
+      @data.commit.id[0..6]
+    end
+
+    def commit_summary
+      commit_message = @data.commit.message.split("\n", 2).first
+      '%s [%s] <%s>' % [commit_message, commit_sha, @data.commit.author_name]
+    end
+
   end
 
   class BuildEvent < BaseEvent
@@ -29,7 +41,7 @@ module Semaphore
     end
 
     def body
-      '%s %s #%s %s %s %s' % [ @data.project_name, @data.branch_name, @data.build_number, @data.commit.message, @data.commit.id, @data.commit.author_name ]
+      '[%s/%s] Build #%s: %s' % [ @data.project_name, @data.branch_name, @data.build_number, commit_summary ]
     end
 
     def url
@@ -53,7 +65,7 @@ module Semaphore
     end
 
     def body
-      '%s #%s %s %s %s' % [ @data.server_name, @data.number, @data.commit.message, @data.commit.id, @data.commit.author_name ]
+      '[%s] Deploy #%s: %s' % [ @data.server_name, @data.number, commit_summary ]
     end
 
     def url

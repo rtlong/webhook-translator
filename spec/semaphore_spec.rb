@@ -18,7 +18,7 @@ describe Semaphore::BuildEvent do
         url: "https://github.com/account/repo/commit/436eaaa85e3373d0d7e31f983a10cf7c42fa2cc8",
           author_name: "gh_user",
           author_email: "user@github.com",
-          message: "Merge pull request #185",
+          message: "Merge pull request #185\n\nblah blah blah",
           timestamp: "2013-09-14T00:14:11Z"
       }
     }
@@ -47,7 +47,9 @@ describe Semaphore::BuildEvent do
     it('should include project name') { should match attrs[:project_name] }
     it('should include branch name') { should match attrs[:branch_name] }
     it('should include commit SHA') { should match attrs[:commit][:id][0..6] }
-    it('should include commit message') { should match attrs[:commit][:message] }
+    it('should include first line of commit message') do
+      should match attrs[:commit][:message].split("\n", 2).first
+    end
     it('should include commit author') { should match attrs[:commit][:author_name] }
     it('should include build_number') { should match /##{attrs[:build_number]}/ }
   end
@@ -121,7 +123,9 @@ describe Semaphore::DeployEvent do
     subject { event.body }
     it('should include server_name') { should match attrs[:server_name] }
     it('should include commit SHA') { should match attrs[:commit][:id][0..6] }
-    it('should include commit message') { should match attrs[:commit][:message] }
+    it('should include first line of commit message') do
+      should match attrs[:commit][:message].split("\n", 2).first
+    end
     it('should include commit author') { should match attrs[:commit][:author_name] }
     it('should include number') { should match /##{attrs[:number]}/ }
   end
