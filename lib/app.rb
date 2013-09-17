@@ -4,63 +4,24 @@ Bundler.require
 
 require 'pry'
 
+require 'event_emitter'
+require 'log_channel'
 require 'flowdock'
 require 'semaphore'
-require 'message_queue'
+require 'helpers/json_io'
+require 'helpers/status'
 
 BOOT_TIME = Time.now
 
-class BaseEvent
-  def self.parse(json)
-    new(MultiJson.load(json))
-  end
-
-  def self.register_listener(listener)
-    listeners.push listener
-  end
-
-  def self.listeners
-    @listeners ||= []
-  end
-
-  def initialize(event_data)
-    @data = Hashie::Mash.new event_data
-  end
-
-  def to_html
-    "<pre>#{MultiJson.dump(@data, pretty: true)}</pre>"
-  end
-
-  def to_s
-    MultiJson.dump(@data, pretty: true)
-  end
-
-  def notify_listeners!
-    self.class.listeners.each do |listener|
-      listener.notify!(self)
-    end
-  end
-end
-module Semaphore
-  class BuildEvent < BaseEvent
-  end
-  class DeployEvent < BaseEvent
-  end
-end
-
-module Status
-  def health_status
-    {
-      boot_time: BOOT_TIME.to_s
-    }
-  end
-end
-
 class WebHookTranslator < NYNY::App
-  helpers Status
+  helpers Status, JsonIO
 
-  after do
-    p response
+  before do
+    @emitter = EventEmitter.new
+    @emitter.add_listener LogChannel.new(STDOUT)
+    if (token = ENV['FLOWDOCK_API_TOKEN'])
+      @emitter.add_listener Flowdock::TeamInbox::Channel.new(token)
+    end
   end
 
   get '/' do
@@ -68,24 +29,17 @@ class WebHookTranslator < NYNY::App
   end
 
   post '/semaphore/build' do
-    request.body.rewind
-    event = Semaphore::BuildEvent.parse(request.body.read)
-    event.notify_listeners!.count
+    event = Semaphore::BuildEvent.new(parse_request_body_as_json)
+    @emitter.emit(event)
+    'okay'
   end
+
   post '/semaphore/deploy' do
-    request.body.rewind
-    event = Semaphore::DeployEvent.parse(request.body.read)
-    event.notify_listeners!.count
+    event = Semaphore::DeployEvent.new(parse_request_body_as_json)
+    @emitter.emit(event)
+    'okay'
   end
 
 end
 
-class StdOutNotifier
-  def self.notify!(event)
-    puts "EVENT: #{event.class.name} #{event.to_s}"
-  end
-end
 
-BaseEvent.register_listener StdOutNotifier
-Semaphore::DeployEvent.register_listener StdOutNotifier
-Semaphore::BuildEvent.register_listener StdOutNotifier
