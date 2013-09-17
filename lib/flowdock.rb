@@ -41,19 +41,20 @@ module Flowdock
 
       def initialize(attrs={})
         @attributes = {}
-        @attributes[:source] = attrs.fetch(:source)
-        verify_attribute! :source
-        @attributes[:from_address] = attrs.fetch(:from_address)
-        verify_attribute! :from_address
-        @attributes[:subject] = attrs.fetch(:subject)
-        verify_attribute! :subject
-        @attributes[:content] = attrs.fetch(:content)
-        verify_attribute! :content
+        @attributes[:source] = attrs[:source]
+        @attributes[:from_address] = attrs[:from_address]
+        @attributes[:subject] = attrs[:subject]
+        @attributes[:content] = attrs[:content]
         @attributes[:from_name] = attrs[:from_name]
         @attributes[:reply_to] = attrs[:reply_to]
         @attributes[:project] = attrs[:project]
-        @attributes[:tags] = Array(attrs.fetch(:tags, []))
+        @attributes[:tags] = Array(attrs[:tags])
         @attributes[:link] = attrs[:link]
+
+        verify_attribute! :source
+        verify_attribute! :from_address
+        verify_attribute! :subject
+        verify_attribute! :content
       end
 
       def as_json
@@ -83,6 +84,7 @@ module Flowdock
       end
     end
   end
+
   module Chat
     # not implemented yet
   end
