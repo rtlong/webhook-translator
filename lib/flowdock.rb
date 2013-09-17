@@ -18,10 +18,9 @@ module Flowdock
       private
 
       def send(message)
-        # POST message.to_json to url
         self.class.post path,
           body: MultiJson.dump(message),
-          headers: { content_type: 'application/json' }
+          headers: { 'Content-Type' => 'application/json' }
       end
 
       def path
