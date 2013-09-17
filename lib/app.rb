@@ -16,7 +16,7 @@ class WebHookTranslator < NYNY::App
 
   before do
     @emitter = EventEmitter.new
-    @emitter.add_listener LogChannel.new(STDOUT)
+    @emitter.add_listener LogChannel.new($stdout)
     if (token = ENV['FLOWDOCK_API_TOKEN'])
       @emitter.add_listener Flowdock::TeamInbox::Channel.new(token)
     end

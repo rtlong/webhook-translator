@@ -3,7 +3,7 @@ require 'log_channel'
 require 'basic_event'
 
 describe LogChannel do
-  let(:stream) { double('stream') }
+  let(:stream) { double('stream', flush: nil) }
 
   let(:event) do
     ::BasicEvent.new(
